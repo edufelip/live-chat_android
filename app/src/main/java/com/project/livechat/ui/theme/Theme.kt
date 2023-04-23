@@ -1,4 +1,4 @@
-package com.example.livechat.ui.theme
+package com.project.livechat.ui.theme
 
 import android.app.Activity
 import android.os.Build

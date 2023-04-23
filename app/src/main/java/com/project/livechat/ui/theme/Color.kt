@@ -1,4 +1,4 @@
-package com.example.livechat.ui.theme
+package com.project.livechat.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
