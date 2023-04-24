@@ -4,16 +4,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.project.livechat.ui.navigation.Screens
+import com.project.livechat.ui.navigation.builder.homeScreen
 import com.project.livechat.ui.theme.LiveChatTheme
 
 class MainActivity : ComponentActivity() {
@@ -27,30 +21,13 @@ class MainActivity : ComponentActivity() {
                     navController = navController,
                     startDestination = Screens.HomeScreen.route,
                     builder = {
-
+                        homeScreen(
+                            navHostController = navController,
+                            onBackPressedDispatcher = onBackPressedDispatcher
+                        )
                     }
                 )
-
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Greeting("Android")
-                }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    LiveChatTheme {
-        Greeting("Android")
     }
 }
