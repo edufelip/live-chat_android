@@ -6,8 +6,8 @@ import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-import com.project.livechat.ui.navigation.Screens
-import com.project.livechat.ui.navigation.builder.homeScreen
+import com.project.livechat.ui.navigation.Routes
+import com.project.livechat.ui.navigation.builder.homeRoute
 import com.project.livechat.ui.theme.LiveChatTheme
 
 class MainActivity : ComponentActivity() {
@@ -19,9 +19,9 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberAnimatedNavController()
                 AnimatedNavHost(
                     navController = navController,
-                    startDestination = Screens.HomeScreen.route,
+                    startDestination = Routes.HomeRoute.route,
                     builder = {
-                        homeScreen(
+                        homeRoute(
                             navHostController = navController,
                             onBackPressedDispatcher = onBackPressedDispatcher
                         )

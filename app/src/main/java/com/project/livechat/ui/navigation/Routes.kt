@@ -2,7 +2,7 @@ package com.project.livechat.ui.navigation
 
 import androidx.navigation.NavHostController
 
-sealed class Screens(val route: String, val argumentKey: String) {
+sealed class Routes(val route: String, val argumentKey: String) {
     fun navigate(navHostController: NavHostController) {
         navHostController.navigate(route)
     }
@@ -29,17 +29,22 @@ sealed class Screens(val route: String, val argumentKey: String) {
         navigate(navHostController)
     }
 
-    object HomeScreen : Screens(
+    object HomeRoute : Routes(
         route = "home_screen",
         argumentKey = "ARGS-HOME-SCREEN"
     )
 
-    object NewChatScreen : Screens(
+    object AuthenticationRoute : Routes(
+        route = "authentication_route",
+        argumentKey = "ARGS-AUTH-SCREEN"
+    )
+
+    object NewChatRoute : Routes(
         route = "new_chat_screen",
         argumentKey = "ARGS-NEW-CHAT-SCREEN"
     )
 
-    object ChatScreen : Screens(
+    object ChatRoute : Routes(
         route = "chat_screen",
         argumentKey = "ARGS-CHAT-SCREEN"
     )

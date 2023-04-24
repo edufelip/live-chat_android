@@ -73,6 +73,8 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.google.android.material)
 
+    implementation(libs.firebase.auth)
+
     implementation(libs.androidx.compose.foundation.layout)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material.iconsExtended)
