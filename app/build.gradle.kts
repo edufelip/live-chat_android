@@ -62,6 +62,7 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
 
     implementation(libs.androidx.activity.compose)
+    implementation(libs.accompanist.navigationanimation)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
