@@ -1,4 +1,4 @@
-package com.project.livechat
+package com.project.livechat.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -9,7 +9,9 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.project.livechat.ui.navigation.Routes
 import com.project.livechat.ui.navigation.builder.homeRoute
 import com.project.livechat.ui.theme.LiveChatTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalAnimationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kapt)
+    alias(libs.plugins.hilt) apply(false)
 }
 
 android {
@@ -72,6 +74,11 @@ dependencies {
     implementation(libs.androidx.navigation.fragment)
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.google.android.material)
+    implementation(libs.hilt.android)
+    implementation(libs.hilt.ext.navigation.compose)
+    kapt(libs.hilt.ext.work)
+    kapt(libs.hilt.ext.compiler)
+    kapt(libs.hilt.compiler)
 
     implementation(libs.firebase.auth)
 
@@ -79,12 +86,12 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material.iconsExtended)
     implementation(libs.androidx.compose.ui.tooling.preview)
-    debugImplementation(libs.androidx.compose.ui.tooling)
     implementation(libs.androidx.compose.ui.util)
     implementation(libs.androidx.compose.ui.viewbinding)
     implementation(libs.androidx.compose.ui.googlefonts)
 
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+    debugImplementation(libs.androidx.compose.ui.tooling)
 
     androidTestImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.core)
@@ -94,4 +101,12 @@ dependencies {
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    androidTestImplementation(libs.hilt.compiler)
+}
+
+kapt {
+    correctErrorTypes = true
+    javacOptions {
+        option("-Adagger.hilt.android.internal.disableAndroidSuperclassValidation=true")
+    }
 }
