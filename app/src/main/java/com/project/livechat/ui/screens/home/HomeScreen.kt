@@ -2,8 +2,11 @@ package com.project.livechat.ui.screens.home
 
 import androidx.activity.OnBackPressedDispatcher
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.pager.HorizontalPager
@@ -16,6 +19,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -26,9 +30,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.project.livechat.ui.screens.home.behavior.homeTabBehaviorFactory
-import com.project.livechat.ui.screens.home.models.HomeTabItem
-import com.project.livechat.ui.screens.home.models.homeTabItemList
+import com.project.livechat.ui.screens.home.models.TabItemModel
+import com.project.livechat.ui.screens.home.models.chatCardList
+import com.project.livechat.ui.screens.home.models.tabItemList
+import com.project.livechat.ui.screens.home.widgets.ChatCard
 import com.project.livechat.ui.screens.home.widgets.TabItem
+import com.project.livechat.ui.theme.LiveChatTheme
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -43,12 +50,12 @@ fun HomeScreen(
 //        val currentUser = mAuth.currentUser
 //        if (currentUser != null) Routes.AuthenticationRoute.navigate(navHostController)
     }
-    HomeContent(itemList = homeTabItemList, pagerState = pagerState)
+    HomeContent(itemList = tabItemList, pagerState = pagerState)
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
-fun HomeContent(itemList: List<HomeTabItem>, pagerState: PagerState) {
+fun HomeContent(itemList: List<TabItemModel>, pagerState: PagerState) {
 
     Scaffold(
         topBar = {
@@ -84,7 +91,7 @@ fun HomeContent(itemList: List<HomeTabItem>, pagerState: PagerState) {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun Tabs(itemList: List<HomeTabItem>, pagerState: PagerState) {
+fun Tabs(itemList: List<TabItemModel>, pagerState: PagerState) {
     val scope = rememberCoroutineScope()
     LazyRow(
         modifier = Modifier.padding(start = 8.dp)
@@ -106,14 +113,26 @@ fun Tabs(itemList: List<HomeTabItem>, pagerState: PagerState) {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun TabsContent(itemList: List<HomeTabItem>, pagerState: PagerState) {
+fun TabsContent(itemList: List<TabItemModel>, pagerState: PagerState) {
     HorizontalPager(
         pageCount = itemList.size,
         state = pagerState,
         userScrollEnabled = false
-    ) { page ->
-        when (page) {
-            0 -> Unit
+    ) { pageIndex ->
+        TabContent()
+    }
+}
+
+@Composable
+fun TabContent() {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxHeight()
+            .padding(top = 8.dp, start = 8.dp, end = 8.dp)
+            .background(MaterialTheme.colorScheme.surface)
+    ) {
+        itemsIndexed(chatCardList) { _, item ->
+            ChatCard(chatCardModel = item)
         }
     }
 }
@@ -123,5 +142,7 @@ fun TabsContent(itemList: List<HomeTabItem>, pagerState: PagerState) {
 @Composable
 fun HomePreview() {
     val pagerState = rememberPagerState()
-    HomeContent(itemList = homeTabItemList, pagerState = pagerState)
+    LiveChatTheme {
+        HomeContent(itemList = tabItemList, pagerState = pagerState)
+    }
 }

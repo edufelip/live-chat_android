@@ -17,8 +17,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.project.livechat.ui.screens.home.models.HomeTabItem
+import com.project.livechat.ui.screens.home.models.TabItemModel
 import com.project.livechat.ui.utils.isIndexCurrent
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -26,7 +27,7 @@ import com.project.livechat.ui.utils.isIndexCurrent
 fun TabItem(
     pagerState: PagerState,
     index: Int,
-    item: HomeTabItem,
+    item: TabItemModel,
     onItemClick: (index: Int) -> Unit
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -72,4 +73,17 @@ fun TabItem(
             }
         }
     }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+@Preview
+fun TabItemPreview() {
+    TabItem(
+        pagerState = PagerState(),
+        index = 0,
+        item = TabItemModel(
+            text = "Example"
+        ),
+    ) { }
 }

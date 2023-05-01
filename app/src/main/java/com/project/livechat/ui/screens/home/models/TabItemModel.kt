@@ -6,20 +6,20 @@ import androidx.compose.material.icons.outlined.Person
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.project.livechat.ui.screens.home.behavior.HomeTabCategory
 
-class HomeTabItem(
+class TabItemModel(
     val text: String?,
     val icon: ImageVector = Icons.Outlined.Person,
     val behavior: HomeTabCategory = HomeTabCategory.FILTER
 )
 
-val homeTabItemList = listOf(
-    HomeTabItem(
+val tabItemList = listOf(
+    TabItemModel(
         text = "All",
     ),
-    HomeTabItem(
+    TabItemModel(
         text = "College",
     ),
-    HomeTabItem(
+    TabItemModel(
         text = null,
         icon = Icons.Default.Add,
         behavior = HomeTabCategory.ADD
