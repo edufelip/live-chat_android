@@ -12,8 +12,6 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -24,11 +22,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.project.livechat.ui.screens.home.behavior.homeTabBehaviorFactory
+import com.project.livechat.ui.screens.home.models.HomeTabItem
+import com.project.livechat.ui.screens.home.models.homeTabItemList
 import com.project.livechat.ui.screens.home.widgets.TabItem
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -37,22 +38,18 @@ fun HomeScreen(
     backPressedDispatcher: OnBackPressedDispatcher
 ) {
     val pagerState = rememberPagerState()
-    val list = listOf(
-        "All" to Icons.Outlined.Person,
-        "College" to Icons.Outlined.Person,
-        "" to Icons.Outlined.Add
-    )
     LaunchedEffect(key1 = Unit) {
 //        val mAuth = FirebaseAuth.getInstance()
 //        val currentUser = mAuth.currentUser
 //        if (currentUser != null) Routes.AuthenticationRoute.navigate(navHostController)
     }
-    HomeContent(itemList = list, pagerState = pagerState)
+    HomeContent(itemList = homeTabItemList, pagerState = pagerState)
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
-fun HomeContent(itemList: List<Pair<String, ImageVector>>, pagerState: PagerState) {
+fun HomeContent(itemList: List<HomeTabItem>, pagerState: PagerState) {
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -87,15 +84,21 @@ fun HomeContent(itemList: List<Pair<String, ImageVector>>, pagerState: PagerStat
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun Tabs(itemList: List<Pair<String, ImageVector>>, pagerState: PagerState) {
+fun Tabs(itemList: List<HomeTabItem>, pagerState: PagerState) {
     val scope = rememberCoroutineScope()
-
     LazyRow(
         modifier = Modifier.padding(start = 8.dp)
     ) {
         itemsIndexed(itemList) { index, item ->
-            TabItem(pagerState = pagerState, index = index, item = item) {
-
+            TabItem(pagerState = pagerState, index = index, item = item) { index ->
+                scope.launch {
+                    homeTabBehaviorFactory(
+                        itemList[index].behavior,
+                        pagerState,
+                        scope,
+                        index
+                    ).execute()
+                }
             }
         }
     }
@@ -103,8 +106,12 @@ fun Tabs(itemList: List<Pair<String, ImageVector>>, pagerState: PagerState) {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun TabsContent(itemList: List<Pair<String, ImageVector>>, pagerState: PagerState) {
-    HorizontalPager(pageCount = itemList.size, state = pagerState, userScrollEnabled = false) { page ->
+fun TabsContent(itemList: List<HomeTabItem>, pagerState: PagerState) {
+    HorizontalPager(
+        pageCount = itemList.size,
+        state = pagerState,
+        userScrollEnabled = false
+    ) { page ->
         when (page) {
             0 -> Unit
         }
@@ -115,11 +122,6 @@ fun TabsContent(itemList: List<Pair<String, ImageVector>>, pagerState: PagerStat
 @Preview
 @Composable
 fun HomePreview() {
-    val list = listOf(
-        "All" to Icons.Outlined.Person,
-        "College" to Icons.Outlined.Person,
-        "" to Icons.Outlined.Add
-    )
     val pagerState = rememberPagerState()
-    HomeContent(itemList = list, pagerState = pagerState)
+    HomeContent(itemList = homeTabItemList, pagerState = pagerState)
 }

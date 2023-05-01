@@ -12,11 +12,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import com.project.livechat.ui.screens.home.models.HomeTabItem
 import com.project.livechat.ui.utils.isIndexCurrent
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -24,31 +27,49 @@ import com.project.livechat.ui.utils.isIndexCurrent
 fun TabItem(
     pagerState: PagerState,
     index: Int,
-    item: Pair<String, ImageVector>,
+    item: HomeTabItem,
     onItemClick: (index: Int) -> Unit
 ) {
+    val isPressed by remember { mutableStateOf(false) }
     Card(
         colors = CardDefaults.cardColors(
             containerColor = if (pagerState.isIndexCurrent(index)) MaterialTheme.colorScheme.primary else Color.Transparent,
         ),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
-        modifier = Modifier.padding(end = 8.dp).clickable {
-            onItemClick.invoke(index)
-        }
+        modifier = Modifier
+            .padding(end = 8.dp)
+            .clickable {
+                onItemClick.invoke(index)
+            }
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(bottom = 8.dp, top = 8.dp, start = 8.dp, end = if (item.first.isNotBlank()) 12.dp else 8.dp),
+            modifier = Modifier.padding(
+                bottom = 8.dp,
+                top = 8.dp,
+                start = 8.dp,
+                end = if (item.text?.isNotBlank() == true) 12.dp else 8.dp
+            ),
         ) {
             Icon(
-                imageVector = item.second,
-                tint = if (pagerState.isIndexCurrent(index)) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.primary,
+                imageVector = item.icon,
+                tint = if (pagerState.isIndexCurrent(index))  {
+                    MaterialTheme.colorScheme.onPrimary
+                } else {
+                    MaterialTheme.colorScheme.primary
+                },
                 contentDescription = null
             )
-            Text(
-                text = item.first,
-                color = if (pagerState.isIndexCurrent(index)) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.primary
-            )
+            item.text?.let {
+                Text(
+                    text = it,
+                    color = if (pagerState.isIndexCurrent(index)) {
+                        MaterialTheme.colorScheme.onPrimary
+                    } else {
+                        MaterialTheme.colorScheme.primary
+                    }
+                )
+            }
         }
     }
 }
