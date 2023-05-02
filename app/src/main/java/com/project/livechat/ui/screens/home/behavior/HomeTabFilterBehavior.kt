@@ -13,7 +13,7 @@ class HomeTabFilterBehavior @OptIn(ExperimentalFoundationApi::class) constructor
     @OptIn(ExperimentalFoundationApi::class)
     override fun execute() {
         scope.launch {
-            pagerState.scrollToPage(index)
+            pagerState.animateScrollToPage(index)
         }
     }
 }

@@ -3,8 +3,11 @@ package com.project.livechat.ui.screens.home
 import androidx.activity.OnBackPressedDispatcher
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -15,16 +18,19 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -93,21 +99,30 @@ fun HomeContent(itemList: List<TabItemModel>, pagerState: PagerState) {
 @Composable
 fun Tabs(itemList: List<TabItemModel>, pagerState: PagerState) {
     val scope = rememberCoroutineScope()
-    LazyRow(
-        modifier = Modifier.padding(start = 8.dp)
-    ) {
-        itemsIndexed(itemList) { index, item ->
-            TabItem(pagerState = pagerState, index = index, item = item) { index ->
-                scope.launch {
-                    homeTabBehaviorFactory(
-                        itemList[index].behavior,
-                        pagerState,
-                        scope,
-                        index
-                    ).execute()
+    Column {
+        LazyRow(
+            modifier = Modifier
+                .padding(start = 8.dp)
+                .padding(bottom = 8.dp)
+        ) {
+            itemsIndexed(itemList) { index, item ->
+                TabItem(pagerState = pagerState, index = index, item = item) { index ->
+                    scope.launch {
+                        homeTabBehaviorFactory(
+                            itemList[index].behavior,
+                            pagerState,
+                            scope,
+                            index
+                        ).execute()
+                    }
                 }
             }
         }
+        Divider(
+            Modifier
+                .height(1.dp)
+                .fillMaxWidth()
+        )
     }
 }
 
@@ -125,14 +140,23 @@ fun TabsContent(itemList: List<TabItemModel>, pagerState: PagerState) {
 
 @Composable
 fun TabContent() {
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxHeight()
-            .padding(top = 8.dp, start = 8.dp, end = 8.dp)
-            .background(MaterialTheme.colorScheme.surface)
-    ) {
-        itemsIndexed(chatCardList) { _, item ->
-            ChatCard(chatCardModel = item)
+    chatCardList.takeIf { it.isNotEmpty() }?.let {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxHeight()
+                .padding(top = 8.dp, start = 8.dp, end = 8.dp)
+                .background(MaterialTheme.colorScheme.surface)
+        ) {
+            itemsIndexed(it) { _, item ->
+                ChatCard(chatCardModel = item)
+            }
+        }
+    } ?: run {
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(text = "")
         }
     }
 }

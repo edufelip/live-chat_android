@@ -86,7 +86,7 @@ fun ChatCard(
                 modifier = Modifier
                     .background(MaterialTheme.colorScheme.primary, shape = CircleShape)
                     .badgeLayout(),
-                fontSize = 14.sp,
+                fontSize = 12.sp,
                 color = MaterialTheme.colorScheme.onPrimary
             )
         }
