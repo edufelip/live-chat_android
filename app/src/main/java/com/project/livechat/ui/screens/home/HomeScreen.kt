@@ -35,6 +35,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.project.livechat.ui.navigation.Routes
 import com.project.livechat.ui.screens.home.behavior.homeTabBehaviorFactory
 import com.project.livechat.ui.screens.home.models.TabItemModel
 import com.project.livechat.ui.screens.home.models.chatCardList
@@ -56,12 +58,20 @@ fun HomeScreen(
 //        val currentUser = mAuth.currentUser
 //        if (currentUser != null) Routes.AuthenticationRoute.navigate(navHostController)
     }
-    HomeContent(itemList = tabItemList, pagerState = pagerState)
+    HomeContent(
+        itemList = tabItemList,
+        pagerState = pagerState,
+        navHostController = navHostController
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
-fun HomeContent(itemList: List<TabItemModel>, pagerState: PagerState) {
+fun HomeContent(
+    itemList: List<TabItemModel>,
+    pagerState: PagerState,
+    navHostController: NavHostController
+) {
 
     Scaffold(
         topBar = {
@@ -78,7 +88,9 @@ fun HomeContent(itemList: List<TabItemModel>, pagerState: PagerState) {
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = { /*TODO*/ }) {
+            FloatingActionButton(onClick = {
+                Routes.ContactsRoute.navigate(navHostController)
+            }) {
                 Icon(
                     imageVector = Icons.Default.Add,
                     contentDescription = null
@@ -166,7 +178,12 @@ fun TabContent() {
 @Composable
 fun HomePreview() {
     val pagerState = rememberPagerState()
+    val navHostController = rememberNavController()
     LiveChatTheme {
-        HomeContent(itemList = tabItemList, pagerState = pagerState)
+        HomeContent(
+            itemList = tabItemList,
+            pagerState = pagerState,
+            navHostController = navHostController
+        )
     }
 }

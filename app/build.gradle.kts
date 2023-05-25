@@ -65,6 +65,7 @@ dependencies {
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.accompanist.navigationanimation)
+    implementation(libs.accompanist.permissions)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

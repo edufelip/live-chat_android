@@ -48,4 +48,9 @@ sealed class Routes(val route: String, val argumentKey: String) {
         route = "chat_screen",
         argumentKey = "ARGS-CHAT-SCREEN"
     )
+
+    object ContactsRoute: Routes(
+        route = "home_screen/contacts_screen",
+        argumentKey = "ARGS-CONTACTS-SCREEN"
+    )
 }

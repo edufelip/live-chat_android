@@ -7,6 +7,7 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.project.livechat.ui.navigation.Routes
+import com.project.livechat.ui.navigation.builder.contactsRoute
 import com.project.livechat.ui.navigation.builder.homeRoute
 import com.project.livechat.ui.theme.LiveChatTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,6 +25,10 @@ class MainActivity : ComponentActivity() {
                     startDestination = Routes.HomeRoute.route,
                     builder = {
                         homeRoute(
+                            navHostController = navController,
+                            onBackPressedDispatcher = onBackPressedDispatcher
+                        )
+                        contactsRoute(
                             navHostController = navController,
                             onBackPressedDispatcher = onBackPressedDispatcher
                         )
