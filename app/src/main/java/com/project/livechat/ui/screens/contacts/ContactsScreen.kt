@@ -1,6 +1,7 @@
 package com.project.livechat.ui.screens.contacts
 
 import android.Manifest
+import android.app.Activity
 import androidx.activity.OnBackPressedDispatcher
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -15,46 +16,79 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.NavHostController
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.PermissionState
-import com.google.accompanist.permissions.rememberPermissionState
+import com.project.livechat.ui.utils.getMultiplePermissionsLauncher
+import com.project.livechat.ui.utils.openAppSettings
+import com.project.livechat.ui.viewmodels.PermissionViewModel
+import com.project.livechat.ui.widgets.ContactsPermissionTextProvider
+import com.project.livechat.ui.widgets.PermissionDialog
 
-@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun ContactsScreen(
     navHostController: NavHostController,
-    backPressedDispatcher: OnBackPressedDispatcher
+    backPressedDispatcher: OnBackPressedDispatcher,
+    permissionViewModel: PermissionViewModel
 ) {
-    val permissionState = rememberPermissionState(permission = Manifest.permission.READ_CONTACTS)
+    val permissionsToRequest = arrayOf(Manifest.permission.READ_CONTACTS)
+    val dialogQueue = permissionViewModel.visiblePermissionDialogQueue
+    val multiplePermissionResultLauncher =
+        getMultiplePermissionsLauncher(permissionsToRequest, permissionViewModel)
     val lifecycleOwner = LocalLifecycleOwner.current
+    val activity = LocalContext.current as Activity
+
     DisposableEffect(key1 = lifecycleOwner, effect = {
         val eventObserver = LifecycleEventObserver { _, event ->
             when (event) {
                 Lifecycle.Event.ON_START -> {
-                    permissionState.launchPermissionRequest()
+                    multiplePermissionResultLauncher.launch(permissionsToRequest)
                 }
+
                 else -> Unit
             }
         }
         lifecycleOwner.lifecycle.addObserver(eventObserver)
-
         onDispose {
             lifecycleOwner.lifecycle.removeObserver(eventObserver)
         }
     })
-    ContactsScreenContent(navHostController, permissionState)
+
+    ContactsScreenContent(navHostController)
+
+    dialogQueue.reversed().forEach { permission ->
+        PermissionDialog(
+            permissionTextProvider = when (permission) {
+                Manifest.permission.READ_CONTACTS -> {
+                    ContactsPermissionTextProvider()
+                }
+
+                else -> return@forEach
+            },
+            isPermanentlyDeclined = !shouldShowRequestPermissionRationale(
+                activity,
+                permission
+            ),
+            onDismiss = permissionViewModel::dismissDialog,
+            onOkClick = {
+                permissionViewModel.dismissDialog()
+
+            },
+            onGoToAppSettingsClick = {
+                activity.openAppSettings()
+            }
+        )
+    }
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ContactsScreenContent(
     navHostController: NavHostController? = null,
-    permissionState: PermissionState? = null
 ) {
     Scaffold(
         topBar = {
@@ -83,7 +117,6 @@ fun ContactsScreenContent(
     }
 }
 
-@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 @Preview
 fun ContactsScreenPreview() {

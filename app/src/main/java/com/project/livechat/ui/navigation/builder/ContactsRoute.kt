@@ -9,17 +9,23 @@ import com.project.livechat.ui.navigation.Routes
 import com.project.livechat.ui.screens.contacts.ContactsScreen
 import com.project.livechat.ui.utils.exitTransition
 import com.project.livechat.ui.utils.popEnterTransition
+import com.project.livechat.ui.viewmodels.PermissionViewModel
 
 @OptIn(ExperimentalAnimationApi::class)
 fun NavGraphBuilder.contactsRoute(
     navHostController: NavHostController,
-    onBackPressedDispatcher: OnBackPressedDispatcher
+    onBackPressedDispatcher: OnBackPressedDispatcher,
+    permissionViewModel: PermissionViewModel
 ) {
     composable(
         route = Routes.ContactsRoute.route,
         popEnterTransition = { popEnterTransition },
         exitTransition = { exitTransition },
     ) {
-        ContactsScreen(navHostController = navHostController, backPressedDispatcher = onBackPressedDispatcher)
+        ContactsScreen(
+            navHostController = navHostController,
+            backPressedDispatcher = onBackPressedDispatcher,
+            permissionViewModel = permissionViewModel
+        )
     }
 }
